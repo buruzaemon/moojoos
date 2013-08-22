@@ -18,6 +18,7 @@ Good question. A few keywords:
 moojoos requires the following:
 
 -  [Python 2.7](http://docs.python.org/release/2.7.5/)
+-  [Numpy 1.6 or greater](http://www.scipy.org/scipylib/download.html)
 
 ## Learn more 
 - You can read more about moojoos on the [project Wiki](https://bitbucket.org/buruzaemon/moojoos/wiki/Home).
