@@ -1,5 +1,5 @@
 # moojoos
-Your description goes here
+Your description goes here.
 
 ## What is moojoos?
 Good question. A few keywords:
@@ -28,9 +28,6 @@ moojoos requires the following:
 -  Fork the project.
 -  Start a feature/bugfix branch.
 -  Commit and push until you are happy with your contribution.
-
-## Changelog
-Please see the {file:CHANGELOG} for this gem's release history.
 
 ## Copyright
 Copyright &copy; 2013, Brooke M. Fujita. All rights reserved. Please see the {file:LICENSE} file for further details. 
