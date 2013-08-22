@@ -17,7 +17,7 @@ Good question. A few keywords:
 ## Requirements
 moojoos requires the following:
 
--  _[Python 2.7]_(http://docs.python.org/release/2.7.5/)
+-  [Python 2.7](http://docs.python.org/release/2.7.5/)
 
 ## Learn more 
 - You can read more about moojoos on the [project Wiki](https://bitbucket.org/buruzaemon/moojoos/wiki/Home).
