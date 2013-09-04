@@ -6,8 +6,8 @@ from scipy import misc
 from scipy.ndimage import filters
 
 cd = os.path.dirname(os.path.abspath(__file__))
-fn = "test.jpg"
-fp = os.path.join(cd, fn)
+fn = "test3"
+fp = os.path.join(cd, fn+".jpg")
 
 # transform raw image into grayscale
 img = Image.open(fp).convert('L')
@@ -16,4 +16,4 @@ img = Image.open(fp).convert('L')
 blur = [2, 5, 10]
 for b in blur:
     gd = filters.gaussian_filter(img, b)
-    misc.imsave("test_%s.jpg"%b, gd)
+    misc.imsave("%s_%s.jpg" % (fn,b), gd)
