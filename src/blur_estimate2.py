@@ -20,7 +20,9 @@ def find_edge_startend(arr, peak):
                 p2 = p1+inc
                 d1 = arr[start]-arr[p1]
                 d2 = arr[p1]-arr[p2]
-                if d1*d2 < 0:
+                if d1 >= arr[start]:
+                    return p1
+                elif d1*d2 < 0:
                     return p1
                 else:
                     start += inc
@@ -55,6 +57,9 @@ b = zip(*b)
 maxx, maxy = a[0], a[1]
 minx, miny = b[0], b[1]
 
+print maxx, maxy
+print minx, miny
+
 # detect peaks in Sobel horiz
 aa, bb = peakdetect(fsoby[:,c], lookahead=1)
 aa = zip(*aa)
@@ -62,6 +67,8 @@ bb = zip(*bb)
 maxx2, maxy2 = aa[0], aa[1]
 minx2, miny2 = bb[0], bb[1]
 
+print maxx2, maxy2
+print minx2, miny2
 
 figure()
 gray()
@@ -70,11 +77,19 @@ subplot(221)
 title("Sobel, vert")
 imshow(fsobx) 
 axhline(r, lw=0.5, color='b', ls=':')
+for pk in [87, 117, 145]:
+    s,e = find_edge_startend(fsobx[r], pk)
+    plot(s, r, 'r+')
+    plot(e, r, 'r+')
 
 subplot(222)
 title("Sobel, horiz")
 imshow(fsoby) 
 axvline(c, lw=0.5, color='b', ls=':')
+for pk in [25, 54, 85]:
+    s,e = find_edge_startend(fsoby[:,c], pk)
+    plot(c, s, 'r+')
+    plot(c, e, 'r+')
 
 subplot(223)
 title("Vert Edges")
