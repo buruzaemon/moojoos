@@ -1,0 +1,8 @@
+# use glob syntax
+syntax: glob
+
+# Temporary files used by vim
+.*.swp
+
+# python, byte-compiled
+*.pyc
