@@ -6,3 +6,6 @@ syntax: glob
 
 # python, byte-compiled
 *.pyc
+
+# mercurial tmp files
+*.orig
