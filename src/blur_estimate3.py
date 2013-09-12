@@ -8,29 +8,6 @@ from scipy.ndimage import filters
 from peakdetect import *
 
 
-def find_edge_startend(arr, peak):
-    def _find_edge(arr, start, inc=1):
-        if start == len(arr)-1:
-            return start
-        elif start == len(arr)-2:
-            return start+1
-        else:
-            while True:
-                p1 = start+inc
-                p2 = p1+inc
-                d1 = arr[start]-arr[p1]
-                d2 = arr[p1]-arr[p2]
-                if d1*d2 < 0:
-                    return p1
-                else:
-                    start += inc
-            
-    start = _find_edge(arr, peak, -1)
-    end   = _find_edge(arr, peak)
-        
-    return start, end     
-            
-
 
 cd = os.path.dirname(os.path.abspath(__file__))
 fn = "BlurryMink.jpg"

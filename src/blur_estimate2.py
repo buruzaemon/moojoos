@@ -5,37 +5,11 @@ from numpy import *
 from PIL import Image
 from pylab import *
 from scipy.ndimage import filters
-from peakdetect import *
-
-
-def find_edge_startend(arr, peak):
-    def _find_edge(arr, start, inc=1):
-        if start == len(arr)-1:
-            return start
-        elif start == len(arr)-2:
-            return start+1
-        else:
-            while True:
-                p1 = start+inc
-                p2 = p1+inc
-                d1 = arr[start]-arr[p1]
-                d2 = arr[p1]-arr[p2]
-                if d1 >= arr[start]:
-                    return p1
-                elif d1*d2 < 0:
-                    return p1
-                else:
-                    start += inc
-            
-    start = _find_edge(arr, peak, -1)
-    end   = _find_edge(arr, peak)
-        
-    return start, end     
-            
-
+import moojoos as mj
 
 cd = os.path.dirname(os.path.abspath(__file__))
-fn = "test3.jpg"
+fn = "BlurryMink.jpg"
+#fn = "test3.jpg"
 fp = os.path.join(cd, fn)
 
 # target row
@@ -51,24 +25,15 @@ filters.sobel(orig, 1, fsobx)
 filters.sobel(orig, 0, fsoby)
 
 # detect peaks in Sobel vert
-a, b = peakdetect(fsobx[r], lookahead=1)
-a = zip(*a)
-b = zip(*b)
+a, b = mj.signal.peak_detect(fsobx[r], lookahead=2, minpeak=5.0)
 maxx, maxy = a[0], a[1]
 minx, miny = b[0], b[1]
 
-print maxx, maxy
-print minx, miny
-
 # detect peaks in Sobel horiz
-aa, bb = peakdetect(fsoby[:,c], lookahead=1)
-aa = zip(*aa)
-bb = zip(*bb)
+aa, bb = mj.signal.peak_detect(fsoby[:,c], lookahead=2, minpeak=5.0)
 maxx2, maxy2 = aa[0], aa[1]
 minx2, miny2 = bb[0], bb[1]
 
-print maxx2, maxy2
-print minx2, miny2
 
 figure()
 gray()
@@ -77,8 +42,8 @@ subplot(221)
 title("Sobel, vert")
 imshow(fsobx) 
 axhline(r, lw=0.5, color='b', ls=':')
-for pk in [87, 117, 145]:
-    s,e = find_edge_startend(fsobx[r], pk)
+for pk in maxx+minx:
+    s,e = mj.signal.find_edge_startend(fsobx[r], pk)
     plot(s, r, 'r+')
     plot(e, r, 'r+')
 
@@ -86,8 +51,8 @@ subplot(222)
 title("Sobel, horiz")
 imshow(fsoby) 
 axvline(c, lw=0.5, color='b', ls=':')
-for pk in [25, 54, 85]:
-    s,e = find_edge_startend(fsoby[:,c], pk)
+for pk in maxx2+minx2:
+    s,e = mj.signal.find_edge_startend(fsoby[:,c], pk)
     plot(c, s, 'r+')
     plot(c, e, 'r+')
 
