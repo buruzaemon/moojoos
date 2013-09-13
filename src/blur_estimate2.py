@@ -8,8 +8,8 @@ from scipy.ndimage import filters
 import moojoos as mj
 
 cd = os.path.dirname(os.path.abspath(__file__))
-fn = "BlurryMink.jpg"
-#fn = "test3.jpg"
+#fn = "BlurryMink.jpg"
+fn = "test3.jpg"
 fp = os.path.join(cd, fn)
 
 # target row
@@ -28,6 +28,12 @@ filters.sobel(orig, 0, fsoby)
 a, b = mj.signal.peak_detect(fsobx[r], lookahead=2, minpeak=5.0)
 maxx, maxy = a[0], a[1]
 minx, miny = b[0], b[1]
+print "hey!"
+print np.sort(maxx+minx)
+for p in np.sort(maxx+minx):
+    s,e = mj.signal.find_edge_startend(fsobx[r], p)
+    print "s = %d, e = %d" % (s,e)
+    print arange(s,e+1)
 
 # detect peaks in Sobel horiz
 aa, bb = mj.signal.peak_detect(fsoby[:,c], lookahead=2, minpeak=5.0)
@@ -61,13 +67,16 @@ title("Vert Edges")
 xlim(0, fsobx.shape[1])
 plot(range(len(orig[r])), orig[r])
 plot(range(len(fsobx[r])), fsobx[r]) 
+axhline(0, lw=0.5, color='g', ls='--')
 plot(maxx, maxy, "r+")
 plot(minx, miny, "r+")
 
 subplot(224)
 title("Horiz Edges")
+xlim(0, fsoby.shape[0])
 plot(range(len(orig[:,c])), orig[:,c])
 plot(range(len(fsoby[:,c])), fsoby[:,c]) 
+axhline(0, lw=0.5, color='g', ls='--')
 plot(maxx2, maxy2, "r+")
 plot(minx2, miny2, "r+")
 
