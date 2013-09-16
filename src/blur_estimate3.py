@@ -45,8 +45,8 @@ for i in [100]:
     mxs, mns = mj.signal.peak_detect(fsobx[i], lookahead=2, minpeak=5.0)
     maxx = mxs[0]
     minx = mns[0]
-    epx  = np.sort(maxx+minx)
-    p_x += epx.size
+    epx  = list(set(maxx+minx))
+    p_x += len(epx)
     epxi = []
     for p in epx:
         s,e = mj.signal.find_edge_startend(fsobx[i], p)
@@ -54,8 +54,8 @@ for i in [100]:
        
     # NOTE: so, how do you remove repeated indices from a list?
     # http://stackoverflow.com/questions/480214/how-do-you-remove-duplicates-from-a-list-in-python-whilst-preserving-order   
-    from collections import OrderedDict
-    epxi = list(OrderedDict.fromkeys(epxi))
+    #from collections import OrderedDict
+    #epxi = list(OrderedDict.fromkeys(epxi))
     print epxi
 
 # IN the horizontal direction...
