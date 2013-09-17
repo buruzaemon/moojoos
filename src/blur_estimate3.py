@@ -52,11 +52,9 @@ for i in [100]:
         s,e = mj.signal.find_edge_startend(fsobx[i], p)
         epxi.extend(np.arange(s,e+1))
        
-    # NOTE: so, how do you remove repeated indices from a list?
-    # http://stackoverflow.com/questions/480214/how-do-you-remove-duplicates-from-a-list-in-python-whilst-preserving-order   
-    #from collections import OrderedDict
-    #epxi = list(OrderedDict.fromkeys(epxi))
+    epxi = list(set(epxi))
     print epxi
+        
 
 # IN the horizontal direction...
 #     FOR EACH column in the sobel-ized image
