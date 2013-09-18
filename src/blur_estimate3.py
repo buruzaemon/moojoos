@@ -9,8 +9,10 @@ from scipy.ndimage import filters
 
 # obtain image
 cd = os.path.dirname(os.path.abspath(__file__))
-fn = "rena_sharp.jpg"
-#fn = "rena_blurry.jpg"
+#fn = "rena_sharp.jpg"
+#fn = "rena_gaussian_2.jpg"
+#fn = "rena_gaussian_5.jpg"
+fn = "rena_gaussian_10.jpg"
 fp = os.path.join(cd, fn)
 
 # grayscale
@@ -30,10 +32,10 @@ filters.sobel(imm, 0, fsoby)
 # IN the vertical direction...
 #     FOR EACH row in the sobel-ized image
 #         identify all edge pixels
-#         FOR each edge pixel in this row
-#             calculate difference of differences
-#             calculate estimated contrast
-#             calculate sharpness measure
+#     FOR each edge pixel in this row
+#         calculate difference of differences
+#         calculate estimated contrast
+#         calculate sharpness measure
 #             IFF measured sharpness exceeds threshold
 #                 increment sharp pixel count
 #             increment total edge pixel count for x
@@ -41,20 +43,26 @@ filters.sobel(imm, 0, fsoby)
 r_x = 0.0
 p_x = 0
 #for i in fsobx.shape[0]:
+epxi = []
 for i in [100]:
-    mxs, mns = mj.signal.peak_detect(fsobx[i], lookahead=2, minpeak=5.0)
+    mxs, mns = mj.signal.peak_detect(fsobx[i], lookahead=1, minpeak=5.0)
     maxx = mxs[0]
     minx = mns[0]
     epx  = list(set(maxx+minx))
     p_x += len(epx)
-    epxi = []
     for p in epx:
         s,e = mj.signal.find_edge_startend(fsobx[i], p)
         epxi.extend(np.arange(s,e+1))
        
     epxi = list(set(epxi))
-    print epxi
-        
+
+print epxi
+val = []
+for e in epxi:
+    val.append( mj.blur.sharpness(img[100], e, 5) )
+
+print val
+P.hist(val, 200, normed=1, histtype='stepfilled')
 
 # IN the horizontal direction...
 #     FOR EACH column in the sobel-ized image
@@ -67,33 +75,33 @@ for i in [100]:
 #                 increment sharp pixel count
 #             increment total edge pixel count for y
 #  calculate total sharpness for R_y
-r_y = 0.0
-
-# calculate overall sharpness as S_i = sqrt(R_x**2 + R_y**2) / sqrt(2)
-s_i = np.sqrt(np.square(r_x) + np.square(r_y)) / np.sqrt(2.0)
-
-# calculate overall blur as 1 - S_i
-print "Estimated total blur: %f" % (1.0 - s_i)
-
-pyl.figure()
-pyl.gray()
-
-pyl.subplot(221)
-pyl.imshow(img) 
-pyl.title('Original image, grayscale')
-pyl.axis('off')
-
-pyl.subplot(222)
-pyl.imshow(imm) 
-pyl.title('Image, median-filtered')
-pyl.axis('off')
-
-pyl.subplot(223)
-pyl.imshow(fsobx) 
-pyl.title('Sobel, vert edges')
-
-pyl.subplot(224)
-pyl.imshow(fsoby) 
-pyl.title('Sobel, horiz edges')
-
-pyl.show()
+#r_y = 0.0
+#
+## calculate overall sharpness as S_i = sqrt(R_x**2 + R_y**2) / sqrt(2)
+#s_i = np.sqrt(np.square(r_x) + np.square(r_y)) / np.sqrt(2.0)
+#
+## calculate overall blur as 1 - S_i
+#print "Estimated total blur: %f" % (1.0 - s_i)
+#
+#pyl.figure()
+#pyl.gray()
+#
+#pyl.subplot(221)
+#pyl.imshow(img) 
+#pyl.title('Original image, grayscale')
+#pyl.axis('off')
+#
+#pyl.subplot(222)
+#pyl.imshow(imm) 
+#pyl.title('Image, median-filtered')
+#pyl.axis('off')
+#
+#pyl.subplot(223)
+#pyl.imshow(fsobx) 
+#pyl.title('Sobel, vert edges')
+#
+#pyl.subplot(224)
+#pyl.imshow(fsoby) 
+#pyl.title('Sobel, horiz edges')
+#
+#pyl.show()

@@ -6,7 +6,7 @@ from scipy import misc
 from scipy.ndimage import filters
 
 cd = os.path.dirname(os.path.abspath(__file__))
-fn = "test3"
+fn = "rena_sharp"
 fp = os.path.join(cd, fn+".jpg")
 
 # transform raw image into grayscale
