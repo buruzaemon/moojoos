@@ -144,6 +144,8 @@ def find_edge_startend(arr, peak):
             while True:
                 p1 = start+inc
                 p2 = p1+inc
+                if p1==0 or p1==len(arr)-1:
+                    return p1
                 d1 = arr[start]-arr[p1]
                 d2 = arr[p1]-arr[p2]
                 if d1 >= arr[start]:

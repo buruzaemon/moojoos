@@ -42,27 +42,30 @@ filters.sobel(imm, 0, fsoby)
 #  calculate total sharpness for R_x
 r_x = 0.0
 p_x = 0
-#for i in fsobx.shape[0]:
-epxi = []
-for i in [100]:
+
+e_x_vals = []
+
+for i in xrange(fsobx.shape[0]):
     mxs, mns = mj.signal.peak_detect(fsobx[i], lookahead=1, minpeak=5.0)
     maxx = mxs[0]
     minx = mns[0]
     epx  = list(set(maxx+minx))
-    p_x += len(epx)
+    
+    epxi = []
     for p in epx:
         s,e = mj.signal.find_edge_startend(fsobx[i], p)
         epxi.extend(np.arange(s,e+1))
-       
     epxi = list(set(epxi))
+    for i in epxi:
+        e_x_vals.append(mj.blur.sharpness(img[i], e, 5))
 
-print epxi
-val = []
-for e in epxi:
-    val.append( mj.blur.sharpness(img[100], e, 5) )
 
-print val
-P.hist(val, 200, normed=1, histtype='stepfilled')
+#val = []
+#for e in epxi:
+#    val.append( mj.blur.sharpness(img[100], e, 5) )
+
+#print val
+#pyl.hist(val, 200, normed=1, histtype='stepfilled')
 
 # IN the horizontal direction...
 #     FOR EACH column in the sobel-ized image

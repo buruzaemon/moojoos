@@ -4,9 +4,14 @@ def sharpness(arr, idx, width, off=2):
     if width < 1:
         raise ValueError("Width value of %d is illegal, must be greater than 0" % idx)
         
-    ii = ( 0 if e<0 else e for e in np.arange(idx-width, idx+width+1) )
+    ii = ( e for e in np.arange(idx-width, idx+width+1) )
     sum_dom, sum_c = 0, 0
     for i in ii:
+        if i < 0:
+            i = 0
+        elif i >= len(arr):
+            i = len(arr)-1
+                
         sum_dom += _diffofdiff(arr, i, off)
         sum_c   += _contrast(arr, i)
     
