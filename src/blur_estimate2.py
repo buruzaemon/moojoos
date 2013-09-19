@@ -1,83 +1,80 @@
 # -*- coding: utf-8 -*-
 import os
-
-from numpy import *
-from PIL import Image
-from pylab import *
-from scipy.ndimage import filters
 import moojoos as mj
-
-cd = os.path.dirname(os.path.abspath(__file__))
-#fn = "BlurryMink.jpg"
-fn = "test3.jpg"
-fp = os.path.join(cd, fn)
-
-# target row
-r = 100
-c = 50
-
-# original image, grayscale
-orig = array(Image.open(fp).convert('L'))
-
-# Sobel filter to detect edges in the vertical
-fsobx, fsoby = zeros(orig.shape), zeros(orig.shape)
-filters.sobel(orig, 1, fsobx)
-filters.sobel(orig, 0, fsoby)
-
-# detect peaks in Sobel vert
-a, b = mj.signal.peak_detect(fsobx[r], lookahead=2, minpeak=5.0)
-maxx, maxy = a[0], a[1]
-minx, miny = b[0], b[1]
-print "hey!"
-print np.sort(maxx+minx)
-for p in np.sort(maxx+minx):
-    s,e = mj.signal.find_edge_startend(fsobx[r], p)
-    print "s = %d, e = %d" % (s,e)
-    print arange(s,e+1)
-
-# detect peaks in Sobel horiz
-aa, bb = mj.signal.peak_detect(fsoby[:,c], lookahead=2, minpeak=5.0)
-maxx2, maxy2 = aa[0], aa[1]
-minx2, miny2 = bb[0], bb[1]
+import numpy as np
+import pylab as pyl
+from PIL import Image
+from scipy.ndimage import filters
 
 
-figure()
-gray()
+#files = [ "rena_sharp.jpg", "rena_gaussian_2.jpg", "rena_gaussian_5.jpg", "rena_gaussian_10.jpg" ]
+files = [ "rena_gaussian_10.jpg" ]
+for fn in files:
+    # obtain image
+    cd = os.path.dirname(os.path.abspath(__file__))
+    fp = os.path.join(cd, fn)
 
-subplot(221)
-title("Sobel, vert")
-imshow(fsobx) 
-axhline(r, lw=0.5, color='b', ls=':')
-for pk in maxx+minx:
-    s,e = mj.signal.find_edge_startend(fsobx[r], pk)
-    plot(s, r, 'r+')
-    plot(e, r, 'r+')
+    # grayscale
+    img = np.array(Image.open(fp).convert('L'))
+    
+    # smooth with median filter
+    # TODO: make median filter size a parameter!
+    #imm = filters.median_filter(img, 3)
+    imm = img
+    
+    # calculate Sobel filters on median-smoothed image
+    # to detect edges
+    fsobx, fsoby = np.zeros(imm.shape), np.zeros(imm.shape)
+    filters.sobel(imm, 1, fsobx)
+    filters.sobel(imm, 0, fsoby)
+    
+    nbedges = 0
+    totbm   = 0
+    # IN the vertical direction...
+    # FOR EACH row in the sobel-ized image
+    #     identify all edge peaks
+    #     increment edge counter
+    #     FOR each edge peak in this row
+    #         calculate width of edge
+    #         increment local blur measure
+    # calculate total blur measure for image rows
+    for i in xrange(fsobx.shape[0]):
+        mxs, mns = mj.signal.peak_detect(fsobx[i], lookahead=1, minpeak=5.0)
+        maxx = mxs[0]
+        minx = mns[0]
+        epx  = list(set(maxx+minx))
+        nbedges += len(epx)
+        for p in epx:
+            s,e = mj.signal.find_edge_startend(fsobx[i], p)
+            totbm += (e-s)
+    
+    print "Image: %s" % fn
+    print "Row blur"
+    print "  nbedges detected: %d" % nbedges
+    print "  acc. blur measure: %d" % totbm
+    print "  blur measure: %f" % (totbm / (1.0*nbedges))
+    print        
+    
+    # IN the horizontal   
+    # FOR EACH col in the sobel-ized image
+    #     identify all edge peaks
+    #     
+    foo = fsoby.transpose()
+    nbedges = 0
+    totbm   = 0
+    for i in xrange(foo.shape[0]):
+        mxs, mns = mj.signal.peak_detect(foo[i], lookahead=1, minpeak=5.0)
+        maxx = mxs[0]
+        minx = mns[0]
+        epx  = list(set(maxx+minx))
+        nbedges += len(epx)
+        for p in epx:
+            s,e = mj.signal.find_edge_startend(foo[i], p)
+            totbm += (e-s)
 
-subplot(222)
-title("Sobel, horiz")
-imshow(fsoby) 
-axvline(c, lw=0.5, color='b', ls=':')
-for pk in maxx2+minx2:
-    s,e = mj.signal.find_edge_startend(fsoby[:,c], pk)
-    plot(c, s, 'r+')
-    plot(c, e, 'r+')
-
-subplot(223)
-title("Vert Edges")
-xlim(0, fsobx.shape[1])
-plot(range(len(orig[r])), orig[r])
-plot(range(len(fsobx[r])), fsobx[r]) 
-axhline(0, lw=0.5, color='g', ls='--')
-plot(maxx, maxy, "r+")
-plot(minx, miny, "r+")
-
-subplot(224)
-title("Horiz Edges")
-xlim(0, fsoby.shape[0])
-plot(range(len(orig[:,c])), orig[:,c])
-plot(range(len(fsoby[:,c])), fsoby[:,c]) 
-axhline(0, lw=0.5, color='g', ls='--')
-plot(maxx2, maxy2, "r+")
-plot(minx2, miny2, "r+")
-
-show()
+    print "Col blur"
+    print "  nbedges detected: %d" % nbedges
+    print "  acc. blur measure: %d" % totbm
+    print "  blur measure: %f" % (totbm / (1.0*nbedges))
+    print 
+    print
