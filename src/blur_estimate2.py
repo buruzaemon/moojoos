@@ -7,8 +7,8 @@ from PIL import Image
 from scipy.ndimage import filters
 
 
-#files = [ "rena_sharp.jpg", "rena_gaussian_2.jpg", "rena_gaussian_5.jpg", "rena_gaussian_10.jpg" ]
-files = [ "rena_gaussian_10.jpg" ]
+files = [ "rena_sharp.jpg", "rena_gaussian_2.jpg", "rena_gaussian_5.jpg", "rena_gaussian_10.jpg" ]
+#files = [ "rena_gaussian_10.jpg" ]
 for fn in files:
     # obtain image
     cd = os.path.dirname(os.path.abspath(__file__))

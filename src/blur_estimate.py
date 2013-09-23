@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-# -*- coding: utf-8 -*-
 import os
 import moojoos as mj
 import numpy as np
@@ -54,8 +53,8 @@ axis('off')
 
 subplot(4,3,2)
 imshow(t1_sob)
-ylim(474,0)
-xlim(0,350)
+xlim(0,test1.shape[1])
+ylim(test1.shape[0],0)
 xticks(range(0,350,100))
 for p in t1s_peaks:
     s,e = mj.signal.find_edge_startend(t1_sob[r], p)
@@ -77,8 +76,8 @@ axis('off')
 
 subplot(4,3,5)
 imshow(t1_sobm)
-ylim(474,0)
-xlim(0,350)
+xlim(0,t1_sobm.shape[1])
+ylim(t1_sobm.shape[0],0)
 xticks(range(0,350,100))
 for p in t1sm_peaks:
     s,e = mj.signal.find_edge_startend(t1_sobm[r], p)
@@ -100,8 +99,8 @@ axis('off')
 
 subplot(4,3,8)
 imshow(t2_sob)
-ylim(474,0)
-xlim(0,350)
+xlim(0,t2_sob.shape[1])
+ylim(t2_sob.shape[0],0)
 xticks(range(0,350,100))
 for p in t2s_peaks:
     s,e = mj.signal.find_edge_startend(t2_sob[r], p)
@@ -123,8 +122,8 @@ axis('off')
 
 subplot(4,3,11)
 imshow(t2_sobm)
-ylim(474,0)
-xlim(0,350)
+xlim(0,test2.shape[1])
+ylim(test2.shape[0],0)
 xticks(range(0,350,100))
 for p in t2sm_peaks:
     s,e = mj.signal.find_edge_startend(t2_sobm[r], p)
