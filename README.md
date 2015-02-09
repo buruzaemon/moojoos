@@ -30,4 +30,4 @@ moojoos requires the following:
 -  Commit and push until you are happy with your contribution.
 
 ## Copyright
-Copyright &copy; 2013, Brooke M. Fujita. All rights reserved. Please see the LICENSE file for further details. 
+Copyright &copy; 2015, Brooke M. Fujita. All rights reserved. Please see the LICENSE file for further details. 
